@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CityListViewController" customModule="WeatherApp" customModuleProvider="target">
+            <connections>
+                <outlet property="cityListTableView" destination="ANL-B0-cFf" id="XQ0-KA-hck"/>
+                <outlet property="showWeatherReportButton" destination="keL-7L-1wy" id="0tb-4o-NIx"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ANL-B0-cFf">
+                    <rect key="frame" x="0.0" y="59" width="393" height="695"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="keL-7L-1wy">
+                    <rect key="frame" x="0.0" y="774" width="393" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="gZo-bt-gUO"/>
+                    </constraints>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" title="Show Weather Report">
+                        <fontDescription key="titleFontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="20"/>
+                    </buttonConfiguration>
+                    <connections>
+                        <action selector="showWeatherReportAction" destination="-1" eventType="touchUpInside" id="JCR-Xi-bmh"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="keL-7L-1wy" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="4C2-Lc-wMe"/>
+                <constraint firstItem="ANL-B0-cFf" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="D4m-9W-7q0"/>
+                <constraint firstItem="keL-7L-1wy" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="DiV-8H-gxZ"/>
+                <constraint firstItem="ANL-B0-cFf" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="Lbc-KX-Nz6"/>
+                <constraint firstItem="keL-7L-1wy" firstAttribute="top" secondItem="ANL-B0-cFf" secondAttribute="bottom" constant="20" id="SEY-Ve-DtR"/>
+                <constraint firstItem="keL-7L-1wy" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Xzd-NA-uR9"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="ANL-B0-cFf" secondAttribute="trailing" id="aUt-7h-RqD"/>
+            </constraints>
+            <point key="canvasLocation" x="-224" y="23"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
