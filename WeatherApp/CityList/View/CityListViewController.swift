@@ -12,6 +12,8 @@ class CityListViewController: UIViewController {
     @IBOutlet private weak var cityListTableView: UITableView!
     @IBOutlet private weak var showWeatherReportButton: UIButton!
     
+    private var activityIndicatorView = UIActivityIndicatorView(style: .large)
+    
     private var viewModel: CityListViewModel? = CityListViewModel()
     
     private var selectedCities: [City] = []
@@ -19,7 +21,8 @@ class CityListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Select Multiple Cities"
+        self.title = "Select Multiple Cities"
+        self.view.addSubview(activityIndicatorView)
         configureTableView()
     }
     
@@ -42,10 +45,20 @@ class CityListViewController: UIViewController {
                 }
             }
         }
-        
-        viewModel?.callWeatherForecatAPI(selectedCities: selectedCities) { weatherForecast, errorMessage in
-            let vc = UIHostingController(rootView: WeatherDetailsView())
-            self.navigationController?.pushViewController(vc, animated: true)
+        callWeatherAPI()
+    }
+    
+    private func callWeatherAPI() {
+        self.activityIndicatorView.startAnimating()
+        viewModel?.callWeatherForecatAPI(
+            selectedCities: selectedCities
+        ) { [weak self] weatherForecast, errorMessage in
+            self?.activityIndicatorView.stopAnimating()
+            let weatherDetailsViewModel = WeatherDetailsViewModel(weatherForecast: weatherForecast)
+            let vc = UIHostingController(
+                rootView: WeatherDetailsView().environmentObject(weatherDetailsViewModel)
+            )
+            self?.navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
