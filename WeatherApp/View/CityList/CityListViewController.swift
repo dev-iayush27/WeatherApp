@@ -42,8 +42,11 @@ class CityListViewController: UIViewController {
                 }
             }
         }
-        let vc = UIHostingController(rootView: WeatherDetailsView())
-        self.navigationController?.pushViewController(vc, animated: true)
+        
+        viewModel?.callWeatherForecatAPI(selectedCities: selectedCities) { weatherForecast, errorMessage in
+            let vc = UIHostingController(rootView: WeatherDetailsView())
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
 
