@@ -26,7 +26,7 @@ struct CityData: Codable {
 
 // MARK: - ForecastList
 struct ForecastList: Codable {
-    let dt: Int
+    let dt: Double
     let main: MainClass
     let weather: [WeatherElement]
     let clouds: Clouds
@@ -36,7 +36,7 @@ struct ForecastList: Codable {
     let rain: Rain?
     let sys: Sys
     let dtTxt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case dt, main, weather, clouds, wind, visibility, pop, rain, sys
         case dtTxt = "dt_txt"
@@ -48,7 +48,7 @@ struct MainClass: Codable {
     let temp, feelsLike, tempMin, tempMax: Double
     let pressure, seaLevel, grndLevel, humidity: Int
     let tempKf: Double
-
+    
     enum CodingKeys: String, CodingKey {
         case temp
         case feelsLike = "feels_like"
@@ -99,4 +99,18 @@ struct Clouds: Codable {
 // MARK: - Coord
 struct Coord: Codable {
     let lon, lat: Double
+}
+
+extension WeatherForecast {
+    var uniqueList: [ForecastList] {
+        var uniqueList = [ForecastList]()
+        for each in list {
+            if !uniqueList.contains(where: {
+                $0.dt.getDateStringFromUTC() == each.dt.getDateStringFromUTC()
+            }) {
+                uniqueList.append(each)
+            }
+        }
+        return uniqueList
+    }
 }
