@@ -17,7 +17,7 @@ final class WebService {
     }
     
     func getWeatherForecastData(completion: @escaping (Result<WeatherForecast?, ErrorType>) -> Void) {
-        let url = "https://api.openweathermap.org/data/2.5/forecast?id=\(cityID)&appid=\(Constants.apiKey)"
+        let url = "https://api.openweathermap.org/data/2.5/forecast?id=\(cityID)&units=metric&appid=\(Constants.apiKey)"
         guard let url = URL(string: url) else {
             completion(.failure(.invalidURL))
             return
