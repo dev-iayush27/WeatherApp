@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = CityListViewController(nibName: "CityListViewController", bundle: nil)
         let rootVC = UINavigationController(rootViewController: vc)
         rootVC.isNavigationBarHidden = false
-        rootVC.navigationBar.prefersLargeTitles = true
+        rootVC.navigationBar.prefersLargeTitles = false
         self.window?.rootViewController = rootVC
         self.window?.makeKeyAndVisible()
         
