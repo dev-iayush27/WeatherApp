@@ -11,8 +11,7 @@ import SwiftUI
 class CityListViewController: UIViewController {
     @IBOutlet private weak var cityListTableView: UITableView!
     @IBOutlet private weak var showWeatherReportButton: UIButton!
-    
-    private var activityIndicatorView = UIActivityIndicatorView(style: .large)
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
     private var viewModel: CityListViewModel? = CityListViewModel()
     
@@ -22,7 +21,7 @@ class CityListViewController: UIViewController {
         super.viewDidLoad()
         
         self.title = "Select Multiple Cities"
-        self.view.addSubview(activityIndicatorView)
+        self.activityIndicator.isHidden = true
         configureTableView()
     }
     
@@ -49,11 +48,23 @@ class CityListViewController: UIViewController {
     }
     
     private func callWeatherAPI() {
-        self.activityIndicatorView.startAnimating()
+        self.activityIndicator.startAnimating()
         viewModel?.callWeatherForecatAPI(
             selectedCities: selectedCities
         ) { [weak self] weatherForecast, errorMessage in
-            self?.activityIndicatorView.stopAnimating()
+            
+            self?.activityIndicator.stopAnimating()
+            
+            if errorMessage != "" {
+                self?.showAlert(title: "Something Went Wrong", message: errorMessage)
+                return
+            }
+            
+            guard !weatherForecast.isEmpty else {
+                self?.showAlert(title: "Something Went Wrong", message: "Please try again later.")
+                return
+            }
+            
             let weatherDetailsViewModel = WeatherDetailsViewModel(weatherForecast: weatherForecast)
             let vc = UIHostingController(
                 rootView: WeatherDetailsView().environmentObject(weatherDetailsViewModel)
@@ -84,5 +95,27 @@ extension CityListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
+    }
+}
+
+extension CityListViewController {
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func showSpinner() {
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
+    }
+    
+    private func hideSpinner() {
+        self.activityIndicator.isHidden = true
+        self.activityIndicator.stopAnimating()
     }
 }

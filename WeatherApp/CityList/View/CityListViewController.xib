@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -10,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CityListViewController" customModule="WeatherApp" customModuleProvider="target">
             <connections>
+                <outlet property="activityIndicator" destination="Gf8-DF-vpb" id="zjU-Py-aQY"/>
                 <outlet property="cityListTableView" destination="ANL-B0-cFf" id="XQ0-KA-hck"/>
                 <outlet property="showWeatherReportButton" destination="keL-7L-1wy" id="0tb-4o-NIx"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -38,22 +40,36 @@
                         <action selector="showWeatherReportAction" destination="-1" eventType="touchUpInside" id="JCR-Xi-bmh"/>
                     </connections>
                 </button>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="Gf8-DF-vpb">
+                    <rect key="frame" x="171.66666666666666" y="401" width="50" height="50"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="LsH-l8-qP6"/>
+                        <constraint firstAttribute="width" secondItem="Gf8-DF-vpb" secondAttribute="height" multiplier="1:1" id="om9-1l-lC9"/>
+                    </constraints>
+                    <color key="color" name="AccentColor"/>
+                </activityIndicatorView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="keL-7L-1wy" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="4C2-Lc-wMe"/>
+                <constraint firstItem="Gf8-DF-vpb" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="CTl-cv-NWY"/>
                 <constraint firstItem="ANL-B0-cFf" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="D4m-9W-7q0"/>
                 <constraint firstItem="keL-7L-1wy" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="DiV-8H-gxZ"/>
                 <constraint firstItem="ANL-B0-cFf" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="Lbc-KX-Nz6"/>
                 <constraint firstItem="keL-7L-1wy" firstAttribute="top" secondItem="ANL-B0-cFf" secondAttribute="bottom" constant="20" id="SEY-Ve-DtR"/>
                 <constraint firstItem="keL-7L-1wy" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Xzd-NA-uR9"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="ANL-B0-cFf" secondAttribute="trailing" id="aUt-7h-RqD"/>
+                <constraint firstItem="Gf8-DF-vpb" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="dr2-Wl-UxC"/>
             </constraints>
             <point key="canvasLocation" x="-224" y="23"/>
         </view>
     </objects>
     <resources>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
