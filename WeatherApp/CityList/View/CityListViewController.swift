@@ -14,6 +14,13 @@ class CityListViewController: UIViewController {
     @IBOutlet private weak var showWeatherReportButton: UIButton!
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet private weak var currentLocationWeatherView: UIView!
+    @IBOutlet private weak var weatherViewHeight: NSLayoutConstraint!
+    @IBOutlet private weak var currentCity: UILabel!
+    @IBOutlet private weak var currentCityTemp: UILabel!
+    @IBOutlet private weak var currentCityTempStatus: UILabel!
+    @IBOutlet private weak var currentCityHighAndLowTemp: UILabel!
+    
     private var viewModel: CityListViewModel? = CityListViewModel()
     
     private var selectedCities: [City] = []
@@ -25,10 +32,18 @@ class CityListViewController: UIViewController {
         super.viewDidLoad()
         
         self.title = viewModel?.title
-        self.activityIndicator.isHidden = true
+        self.currentLocationWeatherView.isHidden = true
+        self.weatherViewHeight.constant = 0
         
         setUpLocationManager()
         configureTableView()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        currentLocationWeatherView.layer.cornerRadius = 10
+        currentLocationWeatherView.clipsToBounds = true
     }
     
     private func setUpLocationManager() {
@@ -40,6 +55,26 @@ class CityListViewController: UIViewController {
         DispatchQueue.global().async {
             if CLLocationManager.locationServicesEnabled() {
                 self.locationManager?.startUpdatingLocation()
+            }
+        }
+    }
+    
+    private func updateCurrentLocationWeatherView(weather: WeatherForecast?) {
+        if let weatherinfo = weather {
+            DispatchQueue.main.async {
+                self.currentLocationWeatherView.isHidden = false
+                self.weatherViewHeight.constant = 150
+                self.currentCity.text = weatherinfo.city.name
+                
+                let temp = "\(String(Int(weather?.list.first?.main.temp ?? 0.0)))°C"
+                self.currentCityTemp.text = temp
+                
+                let status = weather?.list.first?.weather.first?.description.uppercased() ?? ""
+                self.currentCityTempStatus.text = status
+                
+                let highTemp = "H \(String(Int(weather?.list.first?.main.tempMax ?? 0.0)))°C"
+                let lowTemp = "L \(String(Int(weather?.list.first?.main.tempMin ?? 0.0)))°C"
+                self.currentCityHighAndLowTemp.text = highTemp + "   " + lowTemp
             }
         }
     }
@@ -72,7 +107,7 @@ class CityListViewController: UIViewController {
                 return
             }
             
-            print(weather ?? "")
+            self?.updateCurrentLocationWeatherView(weather: weather)
         }
     }
     
@@ -111,6 +146,10 @@ class CityListViewController: UIViewController {
                 }
             }
         }
+        guard !selectedCities.isEmpty else {
+            showAlert(title: "Warning", message: "Please select cities to see weather report.")
+            return
+        }
         callWeatherForecastAPI()
     }
 }
@@ -135,7 +174,7 @@ extension CityListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 40
     }
 }
 

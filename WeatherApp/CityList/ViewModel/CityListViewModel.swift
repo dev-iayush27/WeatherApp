@@ -20,7 +20,7 @@ final class CityListViewModel {
     }
     
     var title: String {
-        return "Select Multiple Cities"
+        return "Weather App"
     }
     
     func callWeatherForecatAPI(

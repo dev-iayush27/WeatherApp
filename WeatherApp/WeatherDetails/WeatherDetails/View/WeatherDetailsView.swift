@@ -16,9 +16,6 @@ struct WeatherDetailsView: View {
                 WeatherDetailsRow(weatherForecast: weatherForecast)
             }
         }
-        .onAppear {
-            print(viewModel.weatherForecast?.count ?? 0)
-        }
         .navigationTitle("Weather Details")
     }
 }
