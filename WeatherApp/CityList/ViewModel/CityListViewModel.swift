@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 final class CityListViewModel {
     var weatherDetailsForCities: [WeatherForecast]? = []
@@ -39,7 +40,6 @@ final class CityListViewModel {
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
-                        print(error.localizedDescription)
                         completion([], error.localizedDescription)
                         group.leave()
                         return
@@ -49,5 +49,24 @@ final class CityListViewModel {
         }
         group.wait()
         completion(weatherDetailsForCities ?? [], "")
+    }
+    
+    func callWeatherAPIForCurrentLocation(
+        coordinates: CLLocationCoordinate2D,
+        completion: @escaping(_ weather: WeatherForecast?, _ errorMessage: String) -> Void
+    ) {
+        WebService(coordinates: coordinates).getWeatherForecastData() { result in
+            switch result {
+            case .success(let response):
+                if let weatherInfo = response {
+                    completion(weatherInfo, "")
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    completion(nil, error.localizedDescription)
+                    return
+                }
+            }
+        }
     }
 }

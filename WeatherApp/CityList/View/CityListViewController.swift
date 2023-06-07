@@ -19,8 +19,7 @@ class CityListViewController: UIViewController {
     private var selectedCities: [City] = []
     
     private var locationManager: CLLocationManager?
-    private var latitude = 0.0
-    private var longitude = 0.0
+    private var coordinates = CLLocationCoordinate2D()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,25 +54,35 @@ class CityListViewController: UIViewController {
         cityListTableView.reloadData()
     }
     
-    @IBAction func showWeatherReportAction() {
-        selectedCities.removeAll()
-        if let selectedRows = cityListTableView.indexPathsForSelectedRows {
-            for indexPath in selectedRows {
-                if let city = viewModel?.cities[indexPath.row] {
-                    selectedCities.append(city)
-                }
+    private func callWeatherAPIForCurrentLocation() {
+        self.showSpinner()
+        viewModel?.callWeatherAPIForCurrentLocation(
+            coordinates: self.coordinates
+        ) { [weak self] weather, errorMessage in
+            
+            self?.hideSpinner()
+            
+            if errorMessage != "" {
+                self?.showAlert(title: "Something Went Wrong", message: errorMessage)
+                return
             }
+            
+            guard weather != nil else {
+                self?.showAlert(title: "Something Went Wrong", message: "Please try again later.")
+                return
+            }
+            
+            print(weather ?? "")
         }
-        callWeatherAPI()
     }
     
-    private func callWeatherAPI() {
-        self.activityIndicator.startAnimating()
+    private func callWeatherForecastAPI() {
+        self.showSpinner()
         viewModel?.callWeatherForecatAPI(
             selectedCities: selectedCities
         ) { [weak self] weatherForecast, errorMessage in
             
-            self?.activityIndicator.stopAnimating()
+            self?.hideSpinner()
             
             if errorMessage != "" {
                 self?.showAlert(title: "Something Went Wrong", message: errorMessage)
@@ -91,6 +100,18 @@ class CityListViewController: UIViewController {
             )
             self?.navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    @IBAction func showWeatherReportAction() {
+        selectedCities.removeAll()
+        if let selectedRows = cityListTableView.indexPathsForSelectedRows {
+            for indexPath in selectedRows {
+                if let city = viewModel?.cities[indexPath.row] {
+                    selectedCities.append(city)
+                }
+            }
+        }
+        callWeatherForecastAPI()
     }
 }
 
@@ -130,13 +151,17 @@ extension CityListViewController {
     }
     
     private func showSpinner() {
-        self.activityIndicator.isHidden = false
-        self.activityIndicator.startAnimating()
+        DispatchQueue.main.async {
+            self.activityIndicator.isHidden = false
+            self.activityIndicator.startAnimating()
+        }
     }
     
     private func hideSpinner() {
-        self.activityIndicator.isHidden = true
-        self.activityIndicator.stopAnimating()
+        DispatchQueue.main.async {
+            self.activityIndicator.isHidden = true
+            self.activityIndicator.stopAnimating()
+        }
     }
 }
 
@@ -145,7 +170,8 @@ extension CityListViewController: CLLocationManagerDelegate {
         guard let locationvalue: CLLocationCoordinate2D = manager.location?.coordinate else {
             return
         }
-        self.latitude = locationvalue.latitude
-        self.longitude = locationvalue.longitude
+        self.coordinates = locationvalue
+        
+        self.callWeatherAPIForCurrentLocation()
     }
 }

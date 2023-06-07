@@ -6,19 +6,31 @@
 //
 
 import Foundation
+import CoreLocation
 
 final class WebService {
     private var urlSession: URLSession
     private var cityID: String
+    private var coordinates: CLLocationCoordinate2D
     
-    init(cityID: String, urlSession: URLSession = .shared) {
+    init(
+        urlSession: URLSession = .shared,
+        cityID: String = "",
+        coordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+    ) {
         self.cityID = cityID
         self.urlSession = urlSession
+        self.coordinates = coordinates
     }
     
     func getWeatherForecastData(completion: @escaping (Result<WeatherForecast?, ErrorType>) -> Void) {
-        let url = "https://api.openweathermap.org/data/2.5/forecast?id=\(cityID)&units=metric&appid=\(Constants.apiKey)"
-        guard let url = URL(string: url) else {
+        var serviceURL = ""
+        if cityID.isEmpty {
+            serviceURL = "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&units=metric&appid=\(Constants.apiKey)"
+        } else {
+            serviceURL = "https://api.openweathermap.org/data/2.5/forecast?id=\(cityID)&units=metric&appid=\(Constants.apiKey)"
+        }
+        guard let url = URL(string: serviceURL) else {
             completion(.failure(.invalidURL))
             return
         }
@@ -34,6 +46,7 @@ final class WebService {
             }
             if let data = data {
                 do {
+                    print(String(data: data, encoding: .utf8) ?? "")
                     let weatherData = try JSONDecoder().decode(WeatherForecast.self, from: data)
                     completion(.success(weatherData))
                 } catch {
