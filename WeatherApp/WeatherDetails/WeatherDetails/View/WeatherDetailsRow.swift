@@ -15,14 +15,15 @@ struct WeatherDetailsRow: View {
             Text(weatherForecast.city.name ?? "")
                 .font(.system(size: 18))
                 .fontWeight(.bold)
-            Text("Temp")
+            Text("\(String(Int(weatherForecast.list.first?.main.temp ?? 0.0)))°C")
                 .font(.system(size: 40))
                 .fontWeight(.medium)
-            Text("Status")
+            Text(weatherForecast.list.first?.weather.first?.description.uppercased() ?? "")
             
             HStack {
-                Text("H Temp")
-                Text("L Temp")
+                Text("H \(String(Int(weatherForecast.list.first?.main.tempMax ?? 0.0)))°C")
+                    .padding(.trailing, 10)
+                Text("L \(String(Int(weatherForecast.list.first?.main.tempMin ?? 0.0)))°C")
             }
             
             VStack(alignment: .leading) {
@@ -30,13 +31,13 @@ struct WeatherDetailsRow: View {
                     .padding(.vertical, 10)
                     .font(.system(size: 18))
                     .fontWeight(.semibold)
-                
-                ForEach((0...5), id: \.self) { _ in
+                                
+                ForEach(weatherForecast.uniqueList, id: \.dt) { weather in
                     HStack {
-                        Text("Day - Date")
+                        Text(weather.dt.getDateStringFromUTC())
                             .padding(.trailing, 5)
                         
-                        AsyncImage(url: URL(string: "https://openweathermap.org/img/w/09d.png")!) { image in
+                        AsyncImage(url: URL(string: "https://openweathermap.org/img/w/\(weather.weather.first?.icon ?? "").png")!) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
@@ -46,18 +47,12 @@ struct WeatherDetailsRow: View {
                         
                         Spacer()
                         
-                        Text("H 25")
+                        Text("H \(String(Int(weather.main.tempMax)))°C")
                             .padding(.trailing, 10)
-                        Text("L 25")
+                        Text("L \(String(Int(weather.main.tempMin)))°C")
                     }
                 }
             }.frame(maxWidth: .infinity, alignment: .leading)
         }.padding(.top, 5)
     }
 }
-
-//struct WeatherDetailsRow_Previews: PreviewProvider {
-//    static var previews: some View {
-//        WeatherDetailsRow(weatherForecast: WeatherForecast())
-//    }
-//}
