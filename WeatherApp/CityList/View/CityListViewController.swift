@@ -37,7 +37,6 @@ class CityListViewController: UIViewController {
     
     @IBAction func showWeatherReportAction() {
         selectedCities.removeAll()
-        print(selectedCities.count)
         if let selectedRows = cityListTableView.indexPathsForSelectedRows {
             for indexPath in selectedRows {
                 if let city = viewModel?.cities[indexPath.row] {

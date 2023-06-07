@@ -26,6 +26,7 @@ final class CityListViewModel {
         selectedCities: [City],
         completion: @escaping(_ weatherList: [WeatherForecast], _ errorMessage: String) -> Void
     ) {
+        self.weatherDetailsForCities?.removeAll()
         let group = DispatchGroup()
         for city in selectedCities {
             group.enter()
