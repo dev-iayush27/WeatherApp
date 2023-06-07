@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import CoreLocation
 
 class CityListViewController: UIViewController {
     @IBOutlet private weak var cityListTableView: UITableView!
@@ -17,12 +18,31 @@ class CityListViewController: UIViewController {
     
     private var selectedCities: [City] = []
     
+    private var locationManager: CLLocationManager?
+    private var latitude = 0.0
+    private var longitude = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = viewModel?.title
         self.activityIndicator.isHidden = true
+        
+        setUpLocationManager()
         configureTableView()
+    }
+    
+    private func setUpLocationManager() {
+        self.locationManager = CLLocationManager()
+        self.locationManager?.delegate = self
+        self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager?.requestAlwaysAuthorization()
+        
+        DispatchQueue.global().async {
+            if CLLocationManager.locationServicesEnabled() {
+                self.locationManager?.startUpdatingLocation()
+            }
+        }
     }
     
     private func configureTableView() {
@@ -117,5 +137,15 @@ extension CityListViewController {
     private func hideSpinner() {
         self.activityIndicator.isHidden = true
         self.activityIndicator.stopAnimating()
+    }
+}
+
+extension CityListViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let locationvalue: CLLocationCoordinate2D = manager.location?.coordinate else {
+            return
+        }
+        self.latitude = locationvalue.latitude
+        self.longitude = locationvalue.longitude
     }
 }
