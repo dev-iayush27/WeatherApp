@@ -20,7 +20,7 @@ class CityListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Select Multiple Cities"
+        self.title = viewModel?.title
         self.activityIndicator.isHidden = true
         configureTableView()
     }
@@ -37,6 +37,7 @@ class CityListViewController: UIViewController {
     
     @IBAction func showWeatherReportAction() {
         selectedCities.removeAll()
+        print(selectedCities.count)
         if let selectedRows = cityListTableView.indexPathsForSelectedRows {
             for indexPath in selectedRows {
                 if let city = viewModel?.cities[indexPath.row] {
@@ -76,7 +77,7 @@ class CityListViewController: UIViewController {
 
 extension CityListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.cities.count ?? 0
+        return viewModel?.citiesCount ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

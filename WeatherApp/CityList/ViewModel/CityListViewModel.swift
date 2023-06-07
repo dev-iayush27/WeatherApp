@@ -8,11 +8,18 @@
 import Foundation
 
 final class CityListViewModel {
-    
     var weatherDetailsForCities: [WeatherForecast]? = []
     
     var cities: [City] {
         return City.cities().sorted{$0.name < $1.name}
+    }
+    
+    var citiesCount: Int {
+        return cities.count
+    }
+    
+    var title: String {
+        return "Select Multiple Cities"
     }
     
     func callWeatherForecatAPI(
